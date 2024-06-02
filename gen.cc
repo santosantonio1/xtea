@@ -1,11 +1,11 @@
 /*
-        128 BIT NUMBER GENERATOR
+        128 BIT (POSTIVIE) NUMBER GENERATOR
 
     author: Antônio dos Santos
     version: 2/6/2024
     github: @santosantonio1
 
-    Usage: ./gen <how many numbers>
+    Usage: ./gen <n_bits> <how many numbers>
 
     This implementation was focused on training C++23 features,
     such as ranges, lambdas...
@@ -38,12 +38,15 @@ int main(int argc, char ** argv)
 
         return v;
     };
+    
+    // Number of bits of the numbers that are to be generated
+    const size_t n_bits = (argc > 2) ? std::stoi(argv[1])/32 : 128/32;
 
     // Number of numbers to be generated
-    const size_t n_numbers = (argc > 1) ? std::stoi(argv[1]) : 10;
+    const size_t n_numbers = (argc > 2) ? std::stoi(argv[2]) : 10;
 
     // 128 bits number -> 4 32 bits integer
-    const auto v = gen(4*n_numbers);
+    const auto v = gen(n_bits*n_numbers);
 
     //--------------------------------------------------------------------------
     //  Method 1
@@ -66,7 +69,7 @@ int main(int argc, char ** argv)
 
     out << n_numbers;
 
-    for(const auto &a : v | std::ranges::views::chunk(4)) {
+    for(const auto &a : v | std::ranges::views::chunk(n_bits)) {
         out << '\n'; 
         for(const auto i : a) 
             out << std::hex << i; 
