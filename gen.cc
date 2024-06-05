@@ -2,7 +2,7 @@
         128 BIT (POSITIVE) NUMBER GENERATOR
 
     author: Antônio dos Santos
-    version: 2/6/2024
+    version: 5/6/2024
     github: @santosantonio1
 
     Usage: ./gen <how many numbers>
