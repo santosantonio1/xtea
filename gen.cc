@@ -1,11 +1,13 @@
 /*
-        128 BIT (POSTIVIE) NUMBER GENERATOR
+        128 BIT (POSITIVE) NUMBER GENERATOR
 
     author: Antônio dos Santos
     version: 2/6/2024
     github: @santosantonio1
 
-    Usage: ./gen <n_bits> <how many numbers>
+    Usage: ./gen <how many numbers>
+        optional: ./gen <how many numbers> <how many bits each number>
+        optional: ./gen <how many numbers> <how many bits each number> <output file name> 
 
     This implementation was focused on training C++23 features,
     such as ranges, lambdas...
@@ -16,6 +18,7 @@
 #include<ranges>
 #include<algorithm>
 #include<vector>
+#include<iomanip>
 
 int main(int argc, char ** argv)
 {
@@ -38,12 +41,12 @@ int main(int argc, char ** argv)
 
         return v;
     };
-    
-    // Number of bits of the numbers that are to be generated
-    const size_t n_bits = (argc > 2) ? std::stoi(argv[1])/32 : 128/32;
 
-    // Number of numbers to be generated
-    const size_t n_numbers = (argc > 2) ? std::stoi(argv[2]) : 10;
+    // Quantity of numbers to be generated
+    const size_t n_numbers = (argc > 1) ? std::stoi(argv[1]) : 10;
+
+    // Quantity of bits for the numbers that are to be generated
+    const size_t n_bits = (argc > 2) ? std::stoi(argv[2])/32 : 128/32;
 
     // 128 bits number -> 4 32 bits integer
     const auto v = gen(n_bits*n_numbers);
@@ -60,19 +63,19 @@ int main(int argc, char ** argv)
 
     //--------------------------------------------------------------
     //  Writes on tests.txt:
-    //      n_numbers
     //      num1
     //      num2
     //      ...
 
-    std::ofstream out("tests.txt");
+    //  NOTE: THERE IS a new line at the end of file
 
-    out << n_numbers;
+    std::ofstream out((argc > 3) ? argv[4] : "data.txt");
 
     for(const auto &a : v | std::ranges::views::chunk(n_bits)) {
-        out << '\n'; 
         for(const auto i : a) 
-            out << std::hex << i; 
+            out << std::hex << std::setw(8) << std::setfill('0') << i;
+
+        out << '\n'; 
     } 
 
     out.close();
